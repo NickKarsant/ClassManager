@@ -1,25 +1,27 @@
 import Layout from 'components/Layout'
+import Link from 'next/link'
 import { API_URL } from '@/config/index'
+import ClassItem from 'components/ClassItem'
 
 export default function HomePage({classes}) {
-  console.log(classes)
   const renderedClasses = classes.map((cl) =>{
 
     return (
-      <div key={cl.classId}>
-        <h3> 
-          {cl.name}
-        </h3>
-        <img src={cl.image}/>
-        <p>{cl.description}</p>
-      </div>
+      <ClassItem key={cl.id} cl={cl}/>
     )
   })
 
   return (
     <Layout>
       <h1>Upcoming Classes</h1>
+      {classes.length === 0 && <h3>No classes listed</h3>}
+      <div>
+
       {renderedClasses}
+      </div>
+      {classes.length > 0 && <Link  className='btn-secondary' href={'/classes'}>
+        View All Classes
+        </Link>}
     </Layout>
   )
 }
