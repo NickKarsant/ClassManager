@@ -9,7 +9,6 @@ import styles from '@/styles/Class.module.css'
 type Props = {}
 
 export default function ClassPage({singleClass}: Props) {
-  console.log(singleClass)
   return (
     <Layout>
       <div className={styles.event}>
