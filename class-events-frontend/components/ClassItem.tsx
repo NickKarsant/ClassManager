@@ -7,11 +7,11 @@ type Props = {}
 export default function ClassItem({cl}) {
   return (
     <div className={styles.event} >
-        <Image alt={'description'} className={styles.img} width={170} height={100} src={cl.image ? cl.image : '/images/event-default.png'} />
+        <Image alt={'description'} className={styles.img} width={170} height={100} src={cl.image?.data?.attributes ? `${cl.image?.data?.attributes?.formats?.thumbnail.url}` : '/images/event-default.png'} />
 
         <div className={styles.info}>
           <span>
-            {cl.day} at {cl.time}
+            {new Date(cl.date).toLocaleString()}
           </span>
             <h3> 
               {cl.name}

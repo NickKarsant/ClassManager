@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "class_events",
+  "info": {
+    "singularName": "class-event",
+    "pluralName": "class-events",
+    "displayName": "class-event",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "students": {
+      "type": "json"
+    },
+    "date": {
+      "type": "datetime"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "teacher": {
+      "type": "string"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "class_events"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "room": {
+      "type": "string"
+    }
+  }
+}

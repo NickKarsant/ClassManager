@@ -3,10 +3,9 @@ import { API_URL } from '@/config/index'
 import ClassItem from 'components/ClassItem'
 
 export default function ClassesPage({classes}) {
-  const renderedClasses = classes.map((cl) =>{
-
+  const renderedClasses = classes.map(({attributes}) =>{
     return (
-      <ClassItem key={cl.slug} cl={cl}/>
+      <ClassItem key={attributes.slug} cl={attributes}/>
     )
   })
   return (
@@ -25,9 +24,8 @@ function parseJSON(response) {
 }
 
 export async function getServerSideProps(){
-  const res = await fetch(`${API_URL}/api/events`)
+  const res = await fetch(`${API_URL}/api/class-events?[populate]=*`)
   const classes = await parseJSON(res)
   return {props:{
-    classes
-  }}
+    classes: classes.data  }}
 }
