@@ -16,8 +16,13 @@ export default function Header({}: Props) {
       <nav>
         <ul>
           <li>
-            <Link href='./classes'>
+            <Link href='/classes'>
               All Classes
+            </Link>
+          </li>
+          <li>
+            <Link href='/classes/add'>
+              Add Class
             </Link>
           </li>
         </ul>

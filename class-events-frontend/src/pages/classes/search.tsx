@@ -57,7 +57,6 @@ export async function getServerSideProps({query: {term}}){
     }
   );  const res = await fetch(`${API_URL}/api/class-events??${query}&populate=*`)
   const classes = await parseJSON(res)
-  console.log(classes.data)
   return {props:{
     classes: classes.data  }}
 }

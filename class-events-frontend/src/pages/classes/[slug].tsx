@@ -10,7 +10,6 @@ type Props = {}
 
 export default function ClassPage({singleClass}: Props) {
 
-  console.log('ClassPage', singleClass)
   return (
     <Layout>
       <div className={styles.event}>
@@ -30,7 +29,7 @@ export default function ClassPage({singleClass}: Props) {
           </h1>
           {singleClass?.image && 
           <div className={styles.image}>
-            <Image alt='dj equipment' width={960}  height={600}  src={singleClass?.image}/>
+            <Image alt='dj equipment' width={800}  height={400}  src={singleClass?.image.data.attributes.formats.medium.url} />
             </div>
           }
           <h3>
