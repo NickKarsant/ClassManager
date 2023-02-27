@@ -23,7 +23,7 @@ function parseJSON(response) {
   })
 }
 
-export async function getServerSideProps(){
+export async function getStaticProps(){
   const res = await fetch(`${API_URL}/api/class-events?[populate]=*`)
   const classes = await parseJSON(res)
   return {props:{

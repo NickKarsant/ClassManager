@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Search from './Search'
 import styles from 'styles/Header.module.css'
 
 type Props = {}
@@ -11,6 +12,7 @@ export default function Header({}: Props) {
           Class Events
         </Link>
       </div>
+      <Search/>
       <nav>
         <ul>
           <li>

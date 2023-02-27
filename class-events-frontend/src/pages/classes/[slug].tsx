@@ -79,7 +79,6 @@ export async function getStaticPaths() {
 export async function getStaticProps( {params: {slug}} ){
   const res = await fetch(`${API_URL}/api/class-events?filters[slug][$eq]=${slug}&populate=*`)
   const classes = await parseJSON(res)
-  // console.log('after fetch classes', classes.data)
   
   return {props:{
     singleClass: classes?.data?.[0].attributes
