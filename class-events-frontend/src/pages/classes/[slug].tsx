@@ -29,7 +29,7 @@ export default function ClassPage({singleClass}: Props) {
           </h1>
           {singleClass?.image && 
           <div className={styles.image}>
-            <Image alt='dj equipment' width={800}  height={400}  src={singleClass?.image.data.attributes.formats.medium.url} />
+            <Image alt='dj equipment' width={800}  height={400}  src={singleClass?.image?.data?.attributes.formats.medium.url} />
             </div>
           }
           <h3>

@@ -4,6 +4,8 @@ import {useRouter} from 'next/router'
 import Link from 'next/link'
 import { API_URL } from '@/config/index'
 import styles from '@/styles/Form.module.css'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 type Props = {}
 
@@ -14,7 +16,8 @@ export default function AddClassPage({}: Props) {
     room:'',
     date:'',
     description:'',
-    another:''
+    another:'',
+    time:'',
   })
 
   const router = useRouter()
@@ -24,9 +27,34 @@ export default function AddClassPage({}: Props) {
     setValues({...values, [name]:value})
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(values)
+    // if true we want an error because there are empty fields
+    const hasEmptyFields = Object.values(values).some((el) => el === '')
+  
+    if(hasEmptyFields){
+      toast.error('Please fill in all fields')
+      return;
+    }
+
+    const res = await fetch(`${API_URL}/api/class-events/`, {
+      method: "POST", 
+      headers: {
+        'Content-Type': 'application/json'
+      }, 
+      body: JSON.stringify({ data: values }),
+    })
+
+    if (!res.ok){
+      toast.error('Something went wrong')
+    } else {
+      toast.success("Class Successfully Added!")
+
+
+      const  json = await res.json()
+      const  evt = json.data.attributes
+      router.push(`/classes/${evt.slug}`)
+    }
   }
   
   return (
@@ -73,7 +101,6 @@ export default function AddClassPage({}: Props) {
             <input type='text' id='another' name='another' value={values.another} onChange={handleInputChange}/>
           </div>
         </div>
-
       <div>
       <label htmlFor='description'>Class Description</label>
       <textarea
@@ -85,7 +112,8 @@ export default function AddClassPage({}: Props) {
         >
         </textarea>
       </div>
-        
+      <ToastContainer />
+
       <input type="submit" value="Add Class" className='btn' />
 
       </form>
