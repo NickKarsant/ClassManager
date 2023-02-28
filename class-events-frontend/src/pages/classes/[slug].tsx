@@ -1,15 +1,38 @@
 import Layout from 'components/Layout'
 import {FaPencilAlt, FaTimes} from 'react-icons/fa'
 import { API_URL } from '@/config/index'
+import {useRouter} from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '@/styles/Class.module.css'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 
 type Props = {}
 
-export default function ClassPage({singleClass}: Props) {
+export default function ClassPage({rawData}: Props) {
+  const {push} = useRouter();
+const singleClass = rawData?.attributes  
+const deleteClass = async (e) => {
 
+      if (confirm('Are you sure?')){
+        const res = await fetch(`${API_URL}/api/class-events/${rawData?.id}`, {
+          method: 'DELETE', 
+        })
+
+        const data = await res.json()
+        console.log('data', data)
+        
+        if (!res.ok){
+          toast.error(data.message)
+        } else {
+          push('/classes')
+        }
+      }
+
+}
+console.log(singleClass)
   return (
     <Layout>
       <div className={styles.event}>
@@ -17,7 +40,7 @@ export default function ClassPage({singleClass}: Props) {
           <Link href={`/event/edit/${singleClass?.id}`} >
             <FaPencilAlt /> Edit Event
           </Link>
-          <a href='#' className={styles.delete}>
+          <a href='#' onClick={deleteClass} className={styles.delete}>
           <FaTimes/> Delete Class
           </a> 
         </div>
@@ -27,9 +50,10 @@ export default function ClassPage({singleClass}: Props) {
           <h1>
             {singleClass?.name}
           </h1>
+          <ToastContainer />
           {singleClass?.image && 
           <div className={styles.image}>
-            <Image alt='dj equipment' width={800}  height={400}  src={singleClass?.image?.data?.attributes.formats.medium.url} />
+            <Image alt='dj equipment' width={800}  height={400}  src={singleClass?.image?.data?.attributes?.formats?.medium?.url} />
             </div>
           }
           <h3>
@@ -80,6 +104,5 @@ export async function getStaticProps( {params: {slug}} ){
   const classes = await parseJSON(res)
   
   return {props:{
-    singleClass: classes?.data?.[0].attributes
-  }, revalidate: 1}
+    rawData: classes?.data?.[0]}, revalidate: 1}
 }
