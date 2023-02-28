@@ -55,7 +55,8 @@ export async function getServerSideProps({query: {term}}){
     {
       encodeValuesOnly: true, // prettify URL
     }
-  );  const res = await fetch(`${API_URL}/api/class-events?${query}&populate=*`)
+  );  
+  const res = await fetch(`${API_URL}/api/class-events?${query}&populate=*`)
   const classes = await parseJSON(res)
   return {props:{
     classes: classes.data  }}

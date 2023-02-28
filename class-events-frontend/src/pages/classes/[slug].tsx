@@ -11,18 +11,21 @@ import 'react-toastify/dist/ReactToastify.css'
 
 type Props = {}
 
-export default function ClassPage({rawData}: Props) {
+export default function ClassPage({singleClass}: Props) {
   const {push} = useRouter();
-const singleClass = rawData?.attributes  
-const deleteClass = async (e) => {
+
+  
+  const singleClassData = singleClass?.attributes
+  console.log('singleClass',  singleClassData)
+
+  const deleteClass = async (e) => {
 
       if (confirm('Are you sure?')){
-        const res = await fetch(`${API_URL}/api/class-events/${rawData?.id}`, {
+        const res = await fetch(`${API_URL}/api/class-events/${singleClass?.id}`, {
           method: 'DELETE', 
         })
 
         const data = await res.json()
-        console.log('data', data)
         
         if (!res.ok){
           toast.error(data.message)
@@ -32,47 +35,48 @@ const deleteClass = async (e) => {
       }
 
 }
-console.log(singleClass)
+
   return (
     <Layout>
       <div className={styles.event}>
         <div className={styles.controls}>
-          <Link href={`/event/edit/${singleClass?.id}`} >
-            <FaPencilAlt /> Edit Event
+          <Link href={`/classes/edit/${singleClass?.id}`} >
+            <FaPencilAlt /> Edit Class
           </Link>
           <a href='#' onClick={deleteClass} className={styles.delete}>
           <FaTimes/> Delete Class
           </a> 
         </div>
         <span>
-          {new Date(singleClass?.date).toLocaleString('en-US')}
+          {new Date(singleClassData?.date).toLocaleString('en-US')}
         </span>
           <h1>
-            {singleClass?.name}
+            {singleClassData?.name}
           </h1>
           <ToastContainer />
-          {singleClass?.image && 
+
+          {singleClassData?.image && 
           <div className={styles.image}>
-            <Image alt='dj equipment' width={800}  height={400}  src={singleClass?.image?.data?.attributes?.formats?.medium?.url} />
+            <Image alt='dj equipment' width={800}  height={400}  src={singleClassData?.image?.data?.attributes?.formats?.medium.url} />
             </div>
           }
           <h3>
             Teaher: 
           </h3>
           <p >
-          {singleClass?.teacher}
+          {singleClassData?.teacher}
             </p>  
           <h3>
             Room: 
           </h3>
           <p > 
-          {singleClass?.room}
+          {singleClassData?.room}
             </p>   
           <h3>
             Description: 
           </h3>
           <p > 
-          {singleClass?.description}
+          {singleClassData?.description}
             </p> 
             <Link className={styles.back} href='/classes'>
             {'<'} Go Back
@@ -104,5 +108,6 @@ export async function getStaticProps( {params: {slug}} ){
   const classes = await parseJSON(res)
   
   return {props:{
-    rawData: classes?.data?.[0]}, revalidate: 1}
+    singleClass: classes?.data?.[0]
+  }, revalidate: 1}
 }
