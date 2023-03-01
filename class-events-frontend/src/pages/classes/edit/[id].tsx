@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import Layout from 'components/Layout'
 import Modal from 'components/Modal'
-import { useState } from 'react'
+import ImageUpload from 'components/ImageUpload'
 import {useRouter} from 'next/router'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -31,7 +32,8 @@ export default function EditClassPage({singleClassRawData}: Props) {
     time:time,
   })
 
-  const [imagePreview, setImagePreview] = useState(singleClass.image ? singleClass.image.data.attributes.formats.thumbnail.url : null)
+
+  const [imagePreview, setImagePreview] = useState(singleClass.image ? singleClass.image.data?.attributes?.formats.thumbnail.url : null)
 
   const router = useRouter()
 
@@ -68,6 +70,13 @@ export default function EditClassPage({singleClassRawData}: Props) {
       const  evt = json.data.attributes
       router.push(`/classes/${evt.slug}`)
     }
+  }
+
+  const imageUploaded = async (e) => {
+    setShowModal(false)
+    const res = await fetch(`${API_URL}/api/class-events/${singleClassRawData.id}/?[populate]=*`)
+    const data = await res.json()
+    setImagePreview(data?.data?.attributes?.image?.data?.attributes?.formats?.thumbnail?.url)
   }
   
   return (
@@ -145,10 +154,10 @@ export default function EditClassPage({singleClassRawData}: Props) {
         )}
 
         <div>
-          <button onClick={() => setShowModal(true)} className='btn-secondary'><FaImage/> Set Image </button>
+          <button onClick={() => setShowModal(true)} className='btn-secondary btn-icon'><FaImage/> Set Image </button>
         </div>
         <Modal show={showModal} onClose ={() => setShowModal(false)}>
-          IMAGE UPLOAD
+          <ImageUpload classId={singleClassRawData.id} imageUploaded={imageUploaded} />
         </Modal>
     </Layout>
   )
