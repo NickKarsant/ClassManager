@@ -1,4 +1,5 @@
 import Layout from 'components/Layout'
+import Modal from 'components/Modal'
 import { useState } from 'react'
 import {useRouter} from 'next/router'
 import Image from 'next/image'
@@ -18,6 +19,8 @@ export default function EditClassPage({singleClassRawData}: Props) {
   const rawDate =  new Date(singleClass.date).toLocaleString('en-US').split(', ')
   const time = rawDate[1].slice(0, 5) + rawDate[1].slice(8, 11)
   
+  const [showModal, setShowModal] = useState(false)
+
   const [values, setValues] = useState({
     name: singleClass.name,
     teacher:singleClass.teacher,
@@ -27,7 +30,7 @@ export default function EditClassPage({singleClassRawData}: Props) {
     another:singleClass.another,
     time:time,
   })
-console.log('singleClass', singleClass)
+
   const [imagePreview, setImagePreview] = useState(singleClass.image ? singleClass.image.data.attributes.formats.thumbnail.url : null)
 
   const router = useRouter()
@@ -69,7 +72,7 @@ console.log('singleClass', singleClass)
   
   return (
     <Layout title='Add New Class'>
-      <h1>Add a Class</h1>
+      <h1>Edit a Class</h1>
       <Link href='/classes'> Go Back</Link>
       <h1>Edit Class</h1>
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -133,8 +136,8 @@ console.log('singleClass', singleClass)
       <h2> Class Image</h2>
         {imagePreview ? (
           <Image src={imagePreview} height={100} width={170}/>
-        ) : (
-          <div>
+          ) : (
+            <div>
             <p>
               No Image uploaded
             </p>
@@ -142,8 +145,11 @@ console.log('singleClass', singleClass)
         )}
 
         <div>
-          <button  className='btn-secondary'><FaImage/> Set Image </button>
+          <button onClick={() => setShowModal(true)} className='btn-secondary'><FaImage/> Set Image </button>
         </div>
+        <Modal show={showModal} onClose ={() => setShowModal(false)}>
+          IMAGE UPLOAD
+        </Modal>
     </Layout>
   )
 }

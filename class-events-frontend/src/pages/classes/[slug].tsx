@@ -13,10 +13,8 @@ type Props = {}
 
 export default function ClassPage({singleClass}: Props) {
   const {push} = useRouter();
-
   
   const singleClassData = singleClass?.attributes
-  console.log('singleClass',  singleClassData)
 
   const deleteClass = async (e) => {
 
@@ -104,10 +102,13 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps( {params: {slug}} ){
-  const res = await fetch(`${API_URL}/api/class-events?filters[slug][$eq]=${slug}&populate=*`)
-  const classes = await parseJSON(res)
+  const res = await fetch(`${API_URL}/api/class-events?filters[slug]slug=${slug}&populate=*`);  
+  const classes = await res.json();
+  const singleClassData= await classes.data;
   
   return {props:{
-    singleClass: classes?.data?.[0]
+    singleClass: singleClassData[0] || null,
   }, revalidate: 1}
 }
+
+
